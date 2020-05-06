@@ -5,10 +5,20 @@
       <FilenameOption v-model="filename" />
       <AutoWidthOption v-model="autoWidth" />
       <BookTypeOption v-model="bookType" />
-      <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+      <el-button
+        :loading="downloadLoading"
+        style="margin:0 0 20px 20px;"
+        type="primary"
+        icon="el-icon-document"
+        @click="handleDownload"
+      >
         {{ $t('excel.export') }} Excel
       </el-button>
-      <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
+      <a
+        href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html"
+        target="_blank"
+        style="margin-left:15px;"
+      >
         <el-tag type="info">Documentation</el-tag>
       </a>
     </div>
@@ -51,6 +61,7 @@ import { parseTime } from '@/utils'
 import FilenameOption from './components/FilenameOption'
 import AutoWidthOption from './components/AutoWidthOption'
 import BookTypeOption from './components/BookTypeOption'
+
 export default {
   name: 'ExportExcel',
   components: { FilenameOption, AutoWidthOption, BookTypeOption },
@@ -78,13 +89,35 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-        const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+        const tHeader = [
+          'Id',
+          'Title',
+          'Author',
+          'Readings',
+          'Date'
+        ]
+        const filterVal = [
+          'id',
+          'title',
+          'author',
+          'pageviews',
+          'display_time'
+        ]
         const list = this.list
         const data = this.formatJson(filterVal, list)
+        debugger
         excel.export_json_to_excel({
           header: tHeader,
-          data,
+          data: [
+            {
+              name: 'test',
+              data
+            },
+            {
+              name: 'test2',
+              data: data.slice(0, 2)
+            }
+          ],
           filename: this.filename,
           autoWidth: this.autoWidth,
           bookType: this.bookType
@@ -106,10 +139,10 @@ export default {
 </script>
 
 <style>
-.radio-label {
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 30px;
-}
+  .radio-label {
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 30px;
+  }
 </style>
