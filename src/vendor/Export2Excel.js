@@ -153,7 +153,7 @@ export function export_table_to_excel(id) {
 }
 
 export function export_json_to_excel({
-  multiHeader = [],
+  multiHeaders = [],
   header,
   data,
   filename,
@@ -164,10 +164,10 @@ export function export_json_to_excel({
   /* original data */
   filename = filename || 'excel-list'
   const wb = new Workbook()
-  data.forEach(({ name, data }) => {
+  data.forEach(({ name, data }, index) => {
     data = [...data]
-    data.unshift(header)
-    debugger
+    data.unshift(header[index])
+    const multiHeader = multiHeaders[index]
     for (let i = multiHeader.length - 1; i > -1; i--) {
       data.unshift(multiHeader[i])
     }
@@ -176,9 +176,9 @@ export function export_json_to_excel({
 
     const ws = sheet_from_array_of_arrays(data)
 
-    if (merges.length > 0) {
+    if (merges[index].length > 0) {
       if (!ws['!merges']) ws['!merges'] = []
-      merges.forEach(item => {
+      merges[index].forEach(item => {
         ws['!merges'].push(XLSX.utils.decode_range(item))
       })
     }
